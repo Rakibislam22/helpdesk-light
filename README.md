@@ -14,6 +14,8 @@ A lightweight helpdesk ticket management REST API built with [NestJS](https://ne
 
 ```text
 helpdesk-lite/
+├── api/
+│   └── index.ts                           # Vercel serverless function entrypoint
 ├── src/
 │   ├── common/
 │   │   ├── request-logger.middleware.ts   # Logs incoming HTTP method and URL
@@ -31,13 +33,15 @@ helpdesk-lite/
 │   │   └── tickets.service.ts             # In-memory ticket store and business logic
 │   ├── app.controller.spec.ts             # Starter unit test file
 │   ├── app.module.ts                      # Root application module
-│   └── main.ts                            # App bootstrap, global prefix, pipes, interceptors
+│   ├── app.setup.ts                       # Shared app configuration & Swagger setup
+│   └── main.ts                            # Local server bootstrap
 ├── test/
 │   └── app.e2e-spec.ts                    # Starter e2e test file
 ├── nest-cli.json                          # Nest CLI configuration
 ├── package.json                           # Dependencies and npm scripts
 ├── tsconfig.json                          # TypeScript configuration
 ├── tsconfig.build.json                    # TypeScript build configuration
+├── vercel.json                            # Vercel routing configuration
 ├── vitest.config.ts                       # Vitest unit test configuration
 └── vitest.config.e2e.ts                   # Vitest e2e test configuration
 ```
@@ -150,3 +154,12 @@ curl -X POST http://localhost:3000/api/tickets \
 curl -X PATCH http://localhost:3000/api/tickets/1/close \
   -H "x-staff-key: helpDesk-staff-key"
 ```
+
+## Deploying to Vercel
+
+This project includes [api/index.ts](api/index.ts) and [vercel.json](vercel.json) for deploying as a Vercel Serverless Function:
+
+1. Push the repository to GitHub and import it in [Vercel](https://vercel.com), or run `vercel --prod` with the Vercel CLI.
+2. All routes are rewritten to `/api` via `vercel.json`, serving endpoints under `/api/tickets` and Swagger UI at `/docs` (loading Swagger UI assets from CDN when `VERCEL` is set).
+
+> **Note:** `TicketsService` currently uses an in-memory array, so ticket data resets on serverless cold starts. For persistent storage in production, connect a database.
