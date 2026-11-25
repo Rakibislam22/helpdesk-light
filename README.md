@@ -80,7 +80,10 @@ npm run build
 npm run start:prod
 ```
 
-Once running, the API is available at `http://localhost:3000/api`.
+Once running, the API is available at `http://localhost:3000/api`, and interactive Swagger documentation is available at:
+
+- **Swagger UI:** `http://localhost:3000/docs`
+- **OpenAPI JSON:** `http://localhost:3000/docs-json`
 
 ### 4. Linting, Formatting & Testing
 
