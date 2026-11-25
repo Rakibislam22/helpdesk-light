@@ -75,4 +75,14 @@ export class TicketsService {
         Object.assign(ticket, updateTicketDto);
         return ticket;
     }
+
+    closeTicket(id: number) {
+        const ticket = this.findOne(id);
+        if (ticket.status === 'closed') {
+            throw new BadRequestException(`Ticket with id ${id} is already closed`);
+        }
+        ticket.status = 'closed';
+
+        return ticket;
+    }
 }
